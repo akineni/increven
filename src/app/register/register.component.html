@@ -1,0 +1,177 @@
+
+<div class="sidenav align-items-center justify-content-center">
+    <a href="#"><img src="assets/images/logo.png"></a>
+</div>
+
+<div class="main">
+    <div class="form-block mx-auto">
+        <div class="text-center mb-5">
+          <h3 class="text-uppercases"><strong>Register</strong></h3>
+          <p class="mb-1jk">Register and become an increven investor today. All fields are required 
+            <span class="text-danger">*</span></p>
+        </div>
+        <div *ngFor="let validationError of registration.validationErrors | keyvalue" 
+        class="alert alert-danger">
+        <strong>{{validationError.key}}:</strong> {{validationError.value}}
+        </div>
+        <div class="alert alert-danger" *ngIf="registration.auth.msg"><strong>
+          {{registration.auth.msg}}</strong></div>
+        <form action="#" method="post" [formGroup]="registrationForm" autocomplete="on">
+            <div class="form-row" formGroupName="name">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="firstName">First name</label>
+                        <input type="text" class="form-control capitalize" id="firstName"
+                        formControlName="firstName" placeholder="First Name" required 
+                        [pattern]="env.patterns.name">
+
+                        <span class="text-danger field-error" 
+                        *ngIf="registrationForm.get('name.firstName')!.errors">
+                          <span *ngIf="registrationForm.get('name.firstName')!.touched && 
+                        registrationForm.get('name.firstName')!.errors!.required">First name is required</span>
+                        <span *ngIf="registrationForm.get('name.firstName')!.touched && 
+                        registrationForm.get('name.firstName')!.errors!.pattern">Invalid name</span>
+                        </span>
+
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="lastName">Last name</label>
+                        <input type="text" class="form-control capitalize" id="lastName"
+                        formControlName="lastName" placeholder="Last Name" required
+                        [pattern]="env.patterns.name">
+
+                        <span class="text-danger field-error" 
+                        *ngIf="registrationForm.get('name.lastName')!.errors">
+                          <span *ngIf="registrationForm.get('name.lastName')!.touched && 
+                        registrationForm.get('name.lastName')!.errors!.required">Last name is required</span>
+                        <span *ngIf="registrationForm.get('name.lastName')!.touched && 
+                        registrationForm.get('name.lastName')!.errors!.pattern">Invalid name</span>
+                        </span>
+
+                    </div>
+                </div>
+            </div>
+
+              <div class="form-group last mb-3">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" placeholder="Your username" id="username"
+                formControlName="username" required>
+
+                <span class="text-danger field-error" *ngIf="registrationForm.controls['username'].errors">
+                  <span *ngIf="registrationForm.controls['username'].touched && 
+                registrationForm.controls['username'].errors.required">Username is required</span>
+                <span *ngIf="registrationForm.controls['username'].touched && 
+                        registrationForm.controls['username'].errors.pattern">Invalid name</span>
+                <span *ngIf="registrationForm.controls['username'].touched && 
+                        registrationForm.controls['username'].errors.unique">Username already taken</span>
+                </span>
+              </div>
+          <div class="form-group first">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" placeholder="your-email@gmail.com" id="email"
+            formControlName="email" required>
+
+            <span class="text-danger field-error" *ngIf = "registrationForm.controls['email'].errors">
+              <span *ngIf="registrationForm.controls['email'].touched && 
+                registrationForm.controls['email'].errors.required">Email is required</span>
+            <span *ngIf="registrationForm.controls['email'].touched && 
+                registrationForm.controls['email'].errors.email">Invalid email</span>
+                <span *ngIf="registrationForm.controls['email'].touched && 
+                registrationForm.controls['email'].errors.unique">Email already in use</span>
+            </span>
+
+          </div>
+
+          <div class="form-group first">
+            <label for="phone">Phone number <small>({{env.minLengths.phoneNumber}} digits phone number)
+              <span class="text-danger">*</span>
+            </small></label>
+            <input type="text" class="form-control" placeholder="Your phone number" id="phone"
+            formControlName="phoneNumber" required [pattern]="env.patterns.phoneNumber">
+
+            <span class="text-danger field-error" *ngIf = "registrationForm.controls['phoneNumber'].errors">
+              <span *ngIf="registrationForm.controls['phoneNumber'].touched && 
+                registrationForm.controls['phoneNumber'].errors.required">Phone number is required</span>
+            <span *ngIf="registrationForm.controls['phoneNumber'].touched && 
+                (registrationForm.controls['phoneNumber'].errors.pattern ||
+                registrationForm.controls['phoneNumber'].errors.minlength)">Invalid phone number</span>
+                <span *ngIf="registrationForm.controls['phoneNumber'].touched && 
+                registrationForm.controls['phoneNumber'].errors.unique">Phone number already in use</span>
+            </span>
+
+          </div>
+          <div class="form-group last mb-3">
+            <label for="password">Password <small>({{env.minLengths.password}} characters minimum)
+              <span class="text-danger">*</span>
+            </small></label>
+            <div class="input-group">
+              <input type="password" class="form-control" placeholder="Your password" id="password"
+            formControlName="password" required (input)="checkPasswordsSync()" [minlength]="env.minLengths.password">
+              <div class="input-group-append">
+                <span class="input-group-text icon-eye"></span>
+              </div>
+          </div>
+            <span class="text-danger field-error" *ngIf="registrationForm.controls['password'].errors">
+              <span *ngIf="registrationForm.controls['password'].touched && 
+                registrationForm.controls['password'].errors.required">Password is required</span>
+            <span *ngIf="registrationForm.controls['password'].touched && 
+                registrationForm.controls['password'].errors.minlength">
+                Password requires at least {{env.minLengths.password}} characters!</span>
+            </span>
+
+          </div>
+
+          <div class="form-group last mb-3">
+            <label for="password2">Confirm Password</label>
+            <div class="input-group">
+              <input type="password" class="form-control" placeholder="Your password again" id="password2"
+              formControlName="password2" required>
+              <div class="input-group-append">
+                <span class="input-group-text icon-eye-slash"></span>
+              </div>
+            </div>
+
+            <span class="text-danger field-error" *ngIf="registrationForm.controls['password2'].errors">
+              <span *ngIf="registrationForm.controls['password2'].touched && 
+                registrationForm.controls['password2'].errors.required">Password confirmation is required</span>
+            <span *ngIf="registrationForm.controls['password2'].touched && 
+                registrationForm.controls['password2'].errors.confirmPassword && 
+                !registrationForm.controls['password2'].errors.required">
+                Passwords mismatch</span>
+            </span>
+          </div>
+
+          <div class="form-group">
+          <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="customSwitch1" formControlName="acceptance">
+            <label class="custom-control-label mb-3 mb-sm-0" for="customSwitch1">
+              I accept the <a href="#" target="_blank">Terms of Use</a> &amp; <a href="#" target="_blank">
+                Privacy Policy</a></label>
+          </div>
+        </div>
+
+          <input type="submit" value="Register" class="btn btn-block py-2 btn-primary" 
+           (click)="register()" [disabled]="registrationForm.invalid">
+
+          <span class="text-center my-3 d-block">or</span>
+          
+          
+          <div class="">
+          <a href="#" class="btn btn-block py-2 btn-facebook">
+            <span class="icon-facebook mr-3"></span> Register with facebook
+          </a>
+          <a href="#" class="btn btn-block py-2 btn-google"><span class="icon-google mr-3"></span> Register with Google</a>
+          </div>
+        </form>
+      </div>
+      <div class="text-center  my-3 d-block">Already have an account? 
+          <a routerLink="/log-in" routerLinkActive="active">Login</a></div>
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

@@ -1,0 +1,7 @@
+<strong>ID:</strong> {{ currentUser?._id }}<br>
+<p><strong>Name:</strong> {{ currentUser?.name?.firstName }} {{ currentUser?.name?.lastName }}<br>
+<strong>Username:</strong> {{ currentUser?.username }}<br>
+<strong>Email:</strong> {{ currentUser?.email }}<br>
+<strong>Phone number:</strong> {{ currentUser?.phoneNumber }}</p>
+
+<p><button (click)="logout()">Log out</button></p>
